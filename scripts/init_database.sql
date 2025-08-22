@@ -8,10 +8,13 @@ Script Purpose:
 In MYSQL schema and datavbase are equivalent
 */
 
-use mysql
-create database DataWarehouse
-use DataWarehouse
+use mysql;
 
-create database bronze
-create database silver
-create database gold
+-- Create main DataWarehouse database
+create database DataWarehouse;
+use DataWarehouse;
+
+-- Create schema-like databases 
+create database bronze;
+create database silver;
+create database gold;
