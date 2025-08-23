@@ -1,5 +1,6 @@
 /*
 ===============================================================================
+
 DDL Script: Create Bronze Tables
 ===============================================================================
     This script creates tables in the 'bronze' schema, dropping existing tables 
