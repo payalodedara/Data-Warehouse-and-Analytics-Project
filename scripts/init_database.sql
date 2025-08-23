@@ -2,6 +2,8 @@
 =============================================================
 Create Database and Schemas
 =============================================================
+USING MYSQL Workbench
+=============================================================
 Script Purpose:
     This script creates a new database named 'DataWarehouse'. Additionally, the script sets up three schemas 
     within the database: 'bronze', 'silver', and 'gold'.
