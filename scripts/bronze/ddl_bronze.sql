@@ -10,6 +10,8 @@ DDL Script: Create Bronze Tables
 
 -- Create DDL for Tables
 
+use bronze;
+
 drop table if exists bronze.crm_cust_info;
 create table bronze.crm_cust_info(
 cst_id varchar(50),
