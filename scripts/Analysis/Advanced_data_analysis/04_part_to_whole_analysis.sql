@@ -1,4 +1,4 @@
-- --------- PART TO WHOLE ANALYSIS ------------------
+-- --------- PART TO WHOLE ANALYSIS ------------------
 -- ==================================================
 
 -- which category contributes to the overasll sales
