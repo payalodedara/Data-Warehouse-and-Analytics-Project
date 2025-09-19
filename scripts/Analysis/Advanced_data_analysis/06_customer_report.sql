@@ -28,6 +28,10 @@ Highlights:
 
 -- --------------- Customer Report -----------------------
 
+DROP VIEW IF EXISTS gold.report_customers;
+
+CREATE VIEW gold.report_customers AS
+
 /*---------------------------------------------------------------------------
 1) Base Query: Retrieves core columns from tables
 ---------------------------------------------------------------------------*/
@@ -76,5 +80,9 @@ END AS avg_order_value,
 -- Compuate average monthly spend
 CASE WHEN life_span = 0 THEN total_sales ELSE total_sales / life_span
 END AS avg_monthly_spend
-from customer_aggregation
+from customer_aggregation;
+
+select * from gold.report_customers 
+
+
 
