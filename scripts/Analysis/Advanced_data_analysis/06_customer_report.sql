@@ -60,6 +60,11 @@ from base_query
 group by customer_key, customer_number, customer_name, age
 )
 
+
+/*---------------------------------------------------------------------------
+  3) Final Query: Combines all customer results into one output
+---------------------------------------------------------------------------*/
+
 select customer_key, customer_number, customer_name, age, 
 CASE 
 	 WHEN age < 20 THEN 'Under 20'
