@@ -74,7 +74,7 @@ TIMESTAMPDIFF(month, last_order_date, CURRENT_DATE()) AS recency,
 CASE WHEN total_sales = 0 THEN 0 ELSE total_sales / total_orders
 END AS avg_order_value,
 -- Compuate average monthly spend
-CASE WHEN lifespan = 0 THEN total_sales ELSE total_sales / lifespan
+CASE WHEN life_span = 0 THEN total_sales ELSE total_sales / life_span
 END AS avg_monthly_spend
 from customer_aggregation
 
