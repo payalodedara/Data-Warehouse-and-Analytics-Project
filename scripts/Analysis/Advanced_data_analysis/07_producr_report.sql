@@ -23,3 +23,67 @@ Highlights:
 -- =============================================================================
 -- Create Report: gold.report_products
 -- =============================================================================
+
+
+
+-- --------------- Product Report -----------------------
+
+DROP VIEW IF EXISTS gold.report_products;
+
+CREATE VIEW gold.report_products AS
+
+/*---------------------------------------------------------------------------
+1) Base Query: Retrieves core columns from fact_sales and dim_products
+---------------------------------------------------------------------------*/
+    
+with base_query as(
+select f.product_key, p.product_name, p.category, p.subcategory, p.product_cost, f.order_number,f.order_date, f.customer_key, f.sales_amount,f.quantity
+from gold.fact_sales f
+left join gold.dim_product p on p.product_key = f.product_key
+where order_date is not null
+),
+
+/*---------------------------------------------------------------------------
+2) Product Aggregations: Summarizes key metrics at the product level
+---------------------------------------------------------------------------*/
+
+product_aggregation AS (
+select product_key, product_name, category, subcategory, product_cost,
+TIMESTAMPDIFF(MONTH, MIN(order_date), MAX(order_date)) AS lifespan,
+MAX(order_date) AS last_sale_date,
+COUNT(DISTINCT order_number) AS total_orders,
+COUNT(DISTINCT customer_key) AS total_customers,
+SUM(sales_amount) AS total_sales,
+SUM(quantity) AS total_quantity,
+ROUND(AVG(CAST(sales_amount AS DECIMAL(10,2)) / NULLIF(quantity, 0)), 1) AS avg_selling_price
+FROM base_query
+GROUP BY product_key, product_name, category, subcategory, product_cost
+)
+
+/*---------------------------------------------------------------------------
+  3) Final Query: Combines all product results into one output
+---------------------------------------------------------------------------*/
+
+SELECT product_key, product_name, category, subcategory, product_cost, last_sale_date,
+TIMESTAMPDIFF(MONTH, last_sale_date, CURDATE()) AS recency_in_months,
+CASE
+WHEN total_sales > 50000 THEN 'High-Performer'
+WHEN total_sales >= 10000 THEN 'Mid-Range'
+ELSE 'Low-Performer'
+END AS product_segment,
+lifespan, total_orders, total_sales, total_quantity, total_customers, avg_selling_price,
+-- Average Order Revenue (AOR)
+CASE 
+WHEN total_orders = 0 THEN 0
+ELSE total_sales / total_orders
+END AS avg_order_revenue,
+
+-- Average Monthly Revenue
+CASE
+WHEN lifespan = 0 THEN total_sales
+ELSE total_sales / lifespan
+END AS avg_monthly_revenue
+
+FROM product_aggregation ;
+
+select * from gold.report_products;
